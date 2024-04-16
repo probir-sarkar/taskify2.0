@@ -10,6 +10,15 @@ export const userTable = sqliteTable("user", {
     .unique(),
   email: text("email").notNull().unique(),
   photo: text("photo"),
+  name: text("name"),
+});
+
+export const passwordTable = sqliteTable("password", {
+  id: text("id").notNull().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  hash: text("hash").notNull(),
 });
 
 export const sessionTable = sqliteTable("session", {
