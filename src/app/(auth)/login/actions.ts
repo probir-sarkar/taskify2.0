@@ -13,6 +13,7 @@ const ERROR_MESSAGES = {
   NO_PASSWORD_FOUND: "No password found. Maybe you logged in through Google. Reset your password for a new one.",
   ERROR_CREATING_USER: "Error creating user",
   INVALID_CREDENTIALS: "Invalid email or password",
+  EMAIL_NOT_VERIFIED: "Email not verified",
 };
 
 export const login = async (data: LoginFormInputs) => {
@@ -23,6 +24,7 @@ export const login = async (data: LoginFormInputs) => {
         userId: userTable.id,
         email: userTable.email,
         passwordHash: passwordTable.hash,
+        emailVerified: userTable.emailVerified,
       })
       .from(userTable)
       .fullJoin(passwordTable, eq(userTable.id, passwordTable.userId))
@@ -34,6 +36,9 @@ export const login = async (data: LoginFormInputs) => {
 
     if (!user.passwordHash) {
       return { success: false, message: ERROR_MESSAGES.NO_PASSWORD_FOUND };
+    }
+    if (!user.emailVerified) {
+      return { success: false, message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED };
     }
     const isValidPassword = await new Argon2id().verify(user.passwordHash, password);
     if (!isValidPassword) {

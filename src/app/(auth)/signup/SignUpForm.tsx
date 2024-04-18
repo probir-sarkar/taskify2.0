@@ -13,6 +13,7 @@ import Link from "next/link";
 
 const SignUpForm = () => {
   const [accountCreated, setAccountCreated] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const {
     register,
     handleSubmit,
@@ -34,7 +35,7 @@ const SignUpForm = () => {
       });
     }
   }
-  if (true) {
+  if (accountCreated) {
     return (
       <div className="mt-8 space-y-8">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }}>
