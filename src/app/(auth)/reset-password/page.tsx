@@ -11,7 +11,7 @@ const ResetPasswordPage = () => {
       <ThemeSwitcher />
       <div className="mx-auto max-w-xl w-full rounded-xl shadow-md bg-white dark:bg-slate-950 p-8 mt-4  ">
         <h1 className="text-3xl font-semibold text-center">Reset Password</h1>
-        <p className="text-center mb-16">Enter your email address to reset your password</p>
+        <p className="text-center ">Enter your email address to reset your password</p>
         <div className="">
           <ResetPasswordForm />
         </div>

@@ -19,7 +19,7 @@ const LoginPage = () => {
           </Link>
         </Button>
         {/* or continue with */}
-        <div className="flex gap-2 w-full items-center mt-4 mb-16">
+        <div className="flex gap-2 w-full items-center my-4">
           <div className="h-[1px] bg-gray-200 w-full" />
           <p className="whitespace-nowrap">Or Continue with</p>
           <div className="h-[1px] bg-gray-200 w-full" />

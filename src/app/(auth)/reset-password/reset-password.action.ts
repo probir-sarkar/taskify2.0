@@ -7,22 +7,17 @@ import { db } from "@/db/db";
 import { passwordResetTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { checkExistingUser } from "@/db/db-queries";
+import { sendResetPasswordEmail } from "@/lib/resend";
 
 export async function createPasswordResetToken(userId: string): Promise<string> {
-  // optionally invalidate all existing tokens
   await db.delete(passwordResetTable).where(eq(passwordResetTable.userId, userId));
   const tokenId = generateId(40);
   const tokenHash = encodeHex(await sha256(new TextEncoder().encode(tokenId)));
-  const insert = await db
-    .insert(passwordResetTable)
-    .values({
-      token: tokenHash,
-      userId,
-      expiresAt: createDate(new TimeSpan(2, "h")),
-    })
-    .returning({ token: passwordResetTable.token });
-  console.log(insert);
-
+  await db.insert(passwordResetTable).values({
+    token: tokenHash,
+    userId,
+    expiresAt: createDate(new TimeSpan(2, "h")),
+  });
   return tokenId;
 }
 
@@ -35,11 +30,10 @@ export async function sendResetPassword(data: { email: string }) {
     }
     const verificationToken = await createPasswordResetToken(user.id);
     const verificationLink = process.env.NEXT_PUBLIC_SITE_URL + "/reset-password/" + verificationToken;
-    console.log(verificationLink);
+    await sendResetPasswordEmail(email, user.name || "User", verificationLink);
 
     return { success: true, message: "Password reset link sent" };
   } catch (e) {
-    console.log(e);
     return { success: false, message: "An error occurred" };
   }
 }

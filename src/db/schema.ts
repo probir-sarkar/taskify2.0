@@ -21,7 +21,8 @@ export const passwordTable = sqliteTable("password", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id")
     .notNull()
-    .references(() => userTable.id, { onDelete: "cascade" }),
+    .references(() => userTable.id, { onDelete: "cascade" })
+    .unique(),
   hash: text("hash").notNull(),
 });
 

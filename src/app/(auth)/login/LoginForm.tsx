@@ -6,6 +6,7 @@ import type { LoginFormInputs } from "./formSchema";
 import { login } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginForm = () => {
   const {
@@ -32,7 +33,7 @@ const LoginForm = () => {
   }
   return (
     <div className="">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
         <Input
           {...register("email", { required: true })}
           label="Email"
@@ -45,19 +46,26 @@ const LoginForm = () => {
           radius="sm"
           size="lg"
         />
-        <Input
-          {...register("password", { required: true })}
-          label="Password"
-          type="password"
-          isInvalid={!!errors.password}
-          errorMessage={errors.password?.message}
-          variant="flat"
-          labelPlacement="outside"
-          placeholder="*********"
-          radius="sm"
-          size="lg"
-        />
-        <Button fullWidth size="lg" radius="sm" color="primary" type="submit">
+        <div className="space-y-2">
+          <Input
+            {...register("password", { required: true })}
+            label="Password"
+            type="password"
+            isInvalid={!!errors.password}
+            errorMessage={errors.password?.message}
+            variant="flat"
+            labelPlacement="outside"
+            placeholder="*********"
+            radius="sm"
+            size="lg"
+          />
+          <div className="text-right ">
+            <Link href="/reset-password" className="underline ">
+              Forgot Password?
+            </Link>
+          </div>
+        </div>
+        <Button className="mt-2" fullWidth size="lg" radius="sm" color="primary" type="submit">
           Log In
         </Button>
       </form>

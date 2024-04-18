@@ -1,11 +1,18 @@
 "use client";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
 import { signupFormResolver } from "./formSchema";
 import type { SignupFormInputs } from "./formSchema";
 import { signup } from "./actions";
+import { toast } from "sonner";
+import { motion } from "framer-motion";
+import { FaCheck } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 const SignUpForm = () => {
+  const [accountCreated, setAccountCreated] = useState(false);
   const {
     register,
     handleSubmit,
@@ -15,11 +22,53 @@ const SignUpForm = () => {
     resolver: signupFormResolver,
   });
   async function onSubmit(data: SignupFormInputs) {
-    await signup(data);
+    const res = await signup(data);
+    if (res.success) {
+      toast.success(res.message, {
+        position: "top-center",
+      });
+      setAccountCreated(true);
+    } else {
+      toast.error(res.message, {
+        position: "top-center",
+      });
+    }
+  }
+  if (true) {
+    return (
+      <div className="mt-8 space-y-8">
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }}>
+          <FaCheck size={64} className="mx-auto" />
+        </motion.div>
+        <p>
+          Congratulations on successfully creating your account! To get started, please log in using your email and
+          password. <br />
+          <br /> Before you can access your account, you&apos;ll need to verify your email address. We&apos;ve sent you
+          an email with further instructions. Please check your inbox and follow the steps to complete the verification
+          process.
+          <br />
+          <br /> If you don&apos;t see the email in your inbox, please check your spam or junk folder.
+          <br />
+          <br /> Click the link below to navigate to the login page.
+        </p>
+      </div>
+    );
   }
   return (
     <div className="">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+      <Button fullWidth variant="flat" size="lg" radius="sm">
+        <Link href="/google" className="flex justify-center items-center gap-2">
+          <FcGoogle size={24} /> Login with Google
+        </Link>
+      </Button>
+      {/* or continue with */}
+      <div className="flex gap-2 w-full items-center my-4">
+        <div className="h-[1px] bg-gray-200 w-full" />
+        <p className="whitespace-nowrap">Or Continue with</p>
+        <div className="h-[1px] bg-gray-200 w-full" />
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 mt-8">
         <Input
           {...register("name", { required: true })}
           isInvalid={!!errors.name}
