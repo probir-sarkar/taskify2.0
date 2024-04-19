@@ -9,7 +9,7 @@ export const userTable = sqliteTable("user", {
     .$defaultFn(() => generateId(15))
     .unique(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(true),
+  emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),
@@ -42,6 +42,14 @@ export const passwordResetTable = sqliteTable("password_reset_token", {
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+});
+export const emailVerificationTable = sqliteTable("email_verification_token", {
+  id: text("id").notNull().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
 });
 

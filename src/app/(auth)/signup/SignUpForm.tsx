@@ -18,7 +18,7 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignupFormInputs>({
     resolver: signupFormResolver,
   });
@@ -118,7 +118,7 @@ const SignUpForm = () => {
           radius="sm"
           size="lg"
         />
-        <Button fullWidth size="lg" radius="sm" color="primary" type="submit">
+        <Button isLoading={isSubmitting} fullWidth size="lg" radius="sm" color="primary" type="submit">
           Sign Up
         </Button>
       </form>
