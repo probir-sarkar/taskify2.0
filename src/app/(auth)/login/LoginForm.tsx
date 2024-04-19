@@ -24,7 +24,7 @@ const LoginForm = () => {
       toast.success(res.message, {
         position: "top-center",
       });
-      router.replace("/dashboard");
+      router.replace("/");
     } else {
       toast.error(res.message, {
         position: "top-center",
